@@ -1,36 +1,34 @@
 import $ from 'jquery';
 
 $.fn.slider = function(this: JQuery): JQuery {
-  const elemPositionTop  = this.position().top,
-        elemPositionLeft = this.position().left,
-        elemParentNode   = this.parent();
+  const input: HTMLElement = this[0],
+        inputPositionTop: number  = input.offsetTop,
+        inputPositionLeft: number = input.offsetLeft,
+        inputParentNode: Node & ParentNode = input.parentNode;
 
-  this.attr('readonly', '');
-  this.attr('tabindex', '-1');
-  this.addClass('sliderLib__hidden-input')
+  input.setAttribute('readonly', '');
+  input.setAttribute('tabindex', '-1');
+  input.classList.add('sliderLib__hidden-input');
 
-  const sliderWrapper = $('<div></div>', {
-          class: 'slider-lib__wrapper',
-        }),
-        sliderBar = $('<div></div>', {
-          class: 'slider-lib__bar',
-        }),
-        sliderBarFilled = $('<div></div>', {
-          class: 'slider-lib__bar-filled',
-        }),
-        sliderHandle = $('<div></div>', {
-          class: 'slider-lib__handle',
-        }),
-        sliderTrigger = $('<div></div>', {
-          class: 'slider-lib__trigger',
-        });
+  const sliderWrapper: HTMLElement = document.createElement('div'),
+        sliderBar: HTMLElement = document.createElement('div'),
+        sliderBarFilled: HTMLElement = document.createElement('div'),
+        sliderHandle: HTMLElement = document.createElement('div'),
+        sliderTrigger: HTMLElement = document.createElement('div');
 
-  sliderHandle.append(sliderTrigger);
-  sliderBar.append(sliderBarFilled, sliderHandle);
-  sliderWrapper.append(sliderBar);
-  elemParentNode.append(sliderWrapper);
+  sliderWrapper.classList.add('slider-lib__wrapper');
+  sliderBar.classList.add('slider-lib__bar');
+  sliderBarFilled.classList.add('slider-lib__bar-filled');
+  sliderHandle.classList.add('slider-lib__handle');
+  sliderTrigger.classList.add('slider-lib__trigger');
 
-  sliderWrapper.css({'top': elemPositionTop, 'left': elemPositionLeft});
+  sliderHandle.appendChild(sliderTrigger);
+  sliderBar.appendChild(sliderBarFilled);
+  sliderBar.appendChild(sliderHandle);
+  sliderWrapper.appendChild(sliderBar);
+  inputParentNode.appendChild(sliderWrapper);
+
+  sliderWrapper.style.cssText = `top: ${inputPositionTop}; left: ${inputPositionLeft}`;
 
   return this;
 };
